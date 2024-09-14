@@ -1,0 +1,31 @@
+{
+  "LogFilePath": "log",
+
+  "BEFlags": {
+    "Date": true,
+    "Time": true,
+    "Microseconds": true,
+    "Longfile": false,
+    "Shortfile": false,
+    "UTC": false,
+    "MsgPrefix": true,
+    "STDFlags": false
+  },
+  "PreBegin": "=> logs begin: ",
+  "PreEnd": "<= logs end: ",
+
+  "Flags": {
+    "Date": true,
+    "Time": true,
+    "Microseconds": false,
+    "Longfile": false,
+    "Shortfile": false,
+    "UTC": false,
+    "MsgPrefix": true,
+    "STDFlags": false
+  },
+  "PreDebug": "[debug] ",
+  "PreInfo": "#info# ",
+  "PreWarning": "|warning| ",
+  "PreError": "<error> "
+}

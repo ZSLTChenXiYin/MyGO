@@ -8,14 +8,14 @@ type managerConfig struct {
 }
 
 func getManagerConfig() *managerConfig {
-	channel_size, events_size := manager.GetUserInfo()
+	channel_size, events_size := manager.GetManagerInfo()
 	return &managerConfig{
 		ChannelSize: channel_size,
 		EventsSize:  events_size,
 	}
 }
 
-// auto import manager config
+// 将指定 json 文件配置导入 manager 框架。
 func ImportManagerConfig(config_path string) error {
 	var manager_config managerConfig
 	err := ImportConfig(&manager_config, config_path)
@@ -23,7 +23,7 @@ func ImportManagerConfig(config_path string) error {
 		return err
 	}
 
-	err = manager.CreateManager(manager.GetUserInfo())
+	err = manager.CreateManager(manager.GetManagerInfo())
 	if err != nil {
 		return err
 	}
@@ -31,7 +31,7 @@ func ImportManagerConfig(config_path string) error {
 	return nil
 }
 
-// auto export manager config
+// 将 manager 框架配置导出至指定 json 文件。
 func ExportManagerConfig(config_path string) error {
 	err := ExportConfig(getManagerConfig(), config_path)
 	if err != nil {

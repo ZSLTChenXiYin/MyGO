@@ -10,16 +10,29 @@ import (
 )
 
 func TestImportLogsConfig(t *testing.T) {
-	config.ImportLogsConfig("logs_config.json")
+	err := config.ImportLogsConfig("logs_config.json")
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	config.ImportManagerConfig("manager_config.json")
-	manager.Events(func() bool {
+	err = config.ImportManagerConfig("manager_config.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = manager.Events(func() bool {
 		logs.Debug("The process has stopped running")
+		logs.Over()
 		logs.CloseLogs()
 		return true
 	}, syscall.SIGINT, syscall.SIGTERM)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	logs.Debug("The log service has been enabled")
+	_, err = logs.Debug("The log service has been enabled")
+	if err != nil {
+		t.Error(err)
+	}
 
 	manager.Run()
 }

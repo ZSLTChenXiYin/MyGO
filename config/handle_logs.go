@@ -20,15 +20,33 @@ type flags struct {
 type logsConfig struct {
 	LogFilePath string
 
+	LogsChannelSize uint
+
 	BEFlags  flags
 	PreBegin string
 	PreEnd   string
 
-	Flags      flags
-	PreDebug   string
-	PreInfo    string
-	PreWarning string
-	PreError   string
+	OutputFlags flags
+	PreDebug    string
+	PreInfo     string
+	PreWarning  string
+	PreError    string
+}
+
+func (tho *logsConfig) getLogsStyle() *logs.LogsStyle {
+	return &logs.LogsStyle{
+		LogsChannelSize: tho.LogsChannelSize,
+
+		BEFlag:   getFlagsNum(tho.BEFlags),
+		PreBegin: tho.PreBegin,
+		PreEnd:   tho.PreEnd,
+
+		OutputFlag: getFlagsNum(tho.OutputFlags),
+		PreDebug:   tho.PreDebug,
+		PreInfo:    tho.PreInfo,
+		PreWarning: tho.PreWarning,
+		PreError:   tho.PreError,
+	}
 }
 
 func getFlagsNum(flags flags) int {
@@ -75,22 +93,7 @@ func getFlags(flags_num int) flags {
 	return flags
 }
 
-func getLogsConfig() *logsConfig {
-	log_file_path, beflag, pre_begin, pre_end, flag, pre_debug, pre_info, pre_warning, pre_error := logs.GetUserInfo()
-	return &logsConfig{
-		LogFilePath: log_file_path,
-		BEFlags:     getFlags(beflag),
-		PreBegin:    pre_begin,
-		PreEnd:      pre_end,
-		Flags:       getFlags(flag),
-		PreDebug:    pre_debug,
-		PreInfo:     pre_info,
-		PreWarning:  pre_warning,
-		PreError:    pre_error,
-	}
-}
-
-// auto import logs config
+// 将指定 json 文件配置导入 logs 框架。
 func ImportLogsConfig(config_path string) error {
 	var logs_config logsConfig
 	err := ImportConfig(&logs_config, config_path)
@@ -98,7 +101,12 @@ func ImportLogsConfig(config_path string) error {
 		return err
 	}
 
-	err = logs.OpenLogs(logs_config.LogFilePath, getFlagsNum(logs_config.BEFlags), getFlagsNum(logs_config.Flags), logs_config.PreBegin, logs_config.PreEnd, logs_config.PreDebug, logs_config.PreInfo, logs_config.PreWarning, logs_config.PreError)
+	err = logs.OpenLogs(logs_config.LogFilePath, logs_config.getLogsStyle())
+	if err != nil {
+		return err
+	}
+
+	err = logs.Run()
 	if err != nil {
 		return err
 	}
@@ -106,7 +114,23 @@ func ImportLogsConfig(config_path string) error {
 	return nil
 }
 
-// auto export logs config
+func getLogsConfig() *logsConfig {
+	log_file_path, logs_style := logs.GetLogsInfo()
+	return &logsConfig{
+		LogFilePath:     log_file_path,
+		LogsChannelSize: logs_style.LogsChannelSize,
+		BEFlags:         getFlags(logs_style.BEFlag),
+		PreBegin:        logs_style.PreBegin,
+		PreEnd:          logs_style.PreEnd,
+		OutputFlags:     getFlags(logs_style.OutputFlag),
+		PreDebug:        logs_style.PreDebug,
+		PreInfo:         logs_style.PreInfo,
+		PreWarning:      logs_style.PreWarning,
+		PreError:        logs_style.PreError,
+	}
+}
+
+// 将 logs 框架配置导出至指定 json 文件。
 func ExportLogsConfig(config_path string) error {
 	err := ExportConfig(getLogsConfig(), config_path)
 	if err != nil {
@@ -114,4 +138,14 @@ func ExportLogsConfig(config_path string) error {
 	}
 
 	return nil
+}
+
+// 将指定 json 文件配置导入并生成 logs reader。
+func ImportLogsReaderConfig(config_path string) (logs_reader *logs.LogsReader, err error) {
+	var logs_config logsConfig
+	err = ImportConfig(&logs_config, config_path)
+	if err != nil {
+		return nil, err
+	}
+	return logs.NewLogsReader(logs_config.LogFilePath, logs_config.getLogsStyle()), nil
 }

@@ -12,7 +12,7 @@ const (
 	read_buf_size = 1024
 )
 
-// auto import config
+// 将 json 文件导入指定结构。
 func ImportConfig[CONFIG_TYPE any](config *CONFIG_TYPE, config_path string) error {
 	if config == nil {
 		return errors.New("config: There is no corresponding instance in config")
@@ -65,7 +65,7 @@ func ImportConfig[CONFIG_TYPE any](config *CONFIG_TYPE, config_path string) erro
 	return nil
 }
 
-// auto export config
+// 将指定结构导出至 json 文件。
 func ExportConfig[CONFIG_TYPE any](config *CONFIG_TYPE, config_path string) error {
 	if config == nil {
 		return errors.New("config: There is no corresponding instance in config")

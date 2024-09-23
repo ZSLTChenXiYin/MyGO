@@ -6,6 +6,7 @@ import (
 	"os/signal"
 )
 
+// 为 manager 添加 event，event_signal 为一个进程信号量， event 为该接收到 event_signal 进程信号量所执行的方法。
 func Event(event func() bool, event_signal os.Signal) error {
 	if int(events_count) == len(events) {
 		map_events := make(map[os.Signal]func() bool, len(events)*2)
@@ -26,6 +27,7 @@ func Event(event func() bool, event_signal os.Signal) error {
 	return nil
 }
 
+// 为 manager 添加 event，event_signals 为多个进程信号量， event 为该接收到 event_signals 进程信号量中任意一种时所执行的方法。
 func Events(event func() bool, event_signals ...os.Signal) error {
 	if int(events_count) == len(events) {
 		map_events := make(map[os.Signal]func() bool, len(events)+len(event_signals))

@@ -20,6 +20,10 @@ func (sc *StandardConfig) Database() DatabaseConfiguration {
 	return sc.DatabaseConfig
 }
 
+func (sc *StandardConfig) Email() EmailConfiguration {
+	return sc.EmailConfig
+}
+
 const (
 	SERVER_CONFIG_MODE_DEV  = "dev"
 	SERVER_CONFIG_MODE_PROD = "prod"

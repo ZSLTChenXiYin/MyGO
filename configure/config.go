@@ -110,11 +110,11 @@ func (dc *DatabaseConfig) DSN() string {
 }
 
 type EmailConfig struct {
-	Template        string `mapstructure:"template"`
-	EmailServerHost string `mapstructure:"host"`
-	EmailServerPort uint   `mapstructure:"port"`
-	SenderEmail     string `mapstructure:"email"`
-	SenderPassword  string `mapstructure:"password"`
+	Template        *string `mapstructure:"template"`
+	EmailServerHost string  `mapstructure:"host"`
+	EmailServerPort uint    `mapstructure:"port"`
+	SenderEmail     string  `mapstructure:"email"`
+	SenderPassword  string  `mapstructure:"password"`
 }
 
 func (ec *EmailConfig) Host() string {

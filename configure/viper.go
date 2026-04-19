@@ -11,15 +11,15 @@ import (
 type ViperConfig struct {
 	lock sync.Mutex
 
-	viper *viper.Viper
-
 	conf Configuration
+
+	viper *viper.Viper
 }
 
 func NewViperConfig(conf Configuration) *ViperConfig {
 	vc := &ViperConfig{
-		viper: viper.New(),
 		conf:  conf,
+		viper: viper.New(),
 	}
 
 	return vc

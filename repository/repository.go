@@ -12,22 +12,20 @@ import (
 )
 
 type Repository struct {
-	conf configure.Configuration
-
 	database *gorm.DB
 }
 
-func NewRepository(conf configure.Configuration) *Repository {
-	return &Repository{conf: conf}
+func NewRepository() *Repository {
+	return &Repository{}
 }
 
-func (r *Repository) Init(logger *logger.ZapGormLogger, tables []any, back func(db *gorm.DB) error) error {
+func (r *Repository) Init(conf configure.Configuration, logger *logger.ZapGormLogger, tables []any, back func(db *gorm.DB) error) error {
 	// 创建 Gorm 配置
 	gorm_config := &gorm.Config{
 		Logger: logger,
 	}
 
-	database_conf := r.conf.Database()
+	database_conf := conf.Database()
 
 	database_driver, input_driver := database_conf.Driver()
 	database_dsn := database_conf.DSN()

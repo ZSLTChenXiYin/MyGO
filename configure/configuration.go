@@ -3,6 +3,7 @@ package configure
 type Configuration interface {
 	Server() ServerConfiguration
 	Log() LogConfiguration
+	Redis() RedisConfiguration
 	Database() DatabaseConfiguration
 	Email() EmailConfiguration
 }
@@ -16,6 +17,12 @@ type LogConfiguration interface {
 	Date() bool
 	OutLog() string
 	ZapLog() string
+}
+
+type RedisConfiguration interface {
+	Address() string
+	Password() string
+	DB() int
 }
 
 type DatabaseConfiguration interface {

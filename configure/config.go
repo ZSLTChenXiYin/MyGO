@@ -71,9 +71,21 @@ func (lc *LogConfig) ZapLog() string {
 }
 
 type RedisConfig struct {
-	Address  string `mapstructure:"address"`
-	Password string `mapstructure:"password"`
-	DB       int    `mapstructure:"db"`
+	RedisAddress  string `mapstructure:"address"`
+	RedisPassword string `mapstructure:"password"`
+	RedisDB       int    `mapstructure:"db"`
+}
+
+func (rc *RedisConfig) Address() string {
+	return rc.RedisAddress
+}
+
+func (rc *RedisConfig) Password() string {
+	return rc.RedisPassword
+}
+
+func (rc *RedisConfig) DB() int {
+	return rc.RedisDB
 }
 
 const (

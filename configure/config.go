@@ -16,6 +16,10 @@ func (sc *StandardConfig) Log() LogConfiguration {
 	return &sc.LogConfig
 }
 
+func (sc *StandardConfig) Redis() RedisConfiguration {
+	return sc.RedisConfig
+}
+
 func (sc *StandardConfig) Database() DatabaseConfiguration {
 	return sc.DatabaseConfig
 }

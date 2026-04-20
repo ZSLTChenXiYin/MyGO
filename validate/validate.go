@@ -27,3 +27,7 @@ func (v *Validator) Init() error {
 func (v *Validator) Validate(a any) error {
 	return v.val.Struct(a)
 }
+
+func (v *Validator) Validator() *validator.Validate {
+	return v.val
+}

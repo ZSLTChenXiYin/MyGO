@@ -48,13 +48,14 @@ func (vc *ViperConfig) Init(name string, back func(v *viper.Viper) error) error 
 		}
 	})
 
-	err := back(vc.viper)
-	if err != nil {
-		return err
+	if back != nil {
+		if err := back(vc.viper); err != nil {
+			return err
+		}
 	}
 
 	// 首次加载配置
-	err = vc.load()
+	err := vc.load()
 	if err != nil {
 		return fmt.Errorf("viper加载配置错误: %v", err)
 	}

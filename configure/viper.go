@@ -30,18 +30,16 @@ func (vc *ViperConfig) Init(name string, back func(v *viper.Viper) error) error 
 	vc.lock.Lock()
 	defer vc.lock.Unlock()
 
-	vc.viper.SetConfigName(fmt.Sprintf("%s.conf", name))
-	vc.viper.SetConfigType("yaml")
-	vc.viper.AddConfigPath(".")
+	vc.viper.SetConfigFile(name + ".conf.yaml")
 
 	// 读取配置文件
-	if err := viper.ReadInConfig(); err != nil {
+	if err := vc.viper.ReadInConfig(); err != nil {
 		return fmt.Errorf("viper读取配置错误: %v", err)
 	}
 
 	// 监听配置文件变化
-	viper.WatchConfig()
-	viper.OnConfigChange(func(in fsnotify.Event) {
+	vc.viper.WatchConfig()
+	vc.viper.OnConfigChange(func(in fsnotify.Event) {
 		var err error
 		// 加载配置
 		err = vc.load()
@@ -69,7 +67,7 @@ func (vc *ViperConfig) load() error {
 	vc.lock.Lock()
 	defer vc.lock.Unlock()
 
-	err := viper.Unmarshal(vc.conf)
+	err := vc.viper.Unmarshal(vc.conf)
 	return err
 }
 

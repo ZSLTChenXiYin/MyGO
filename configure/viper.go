@@ -26,10 +26,6 @@ func NewViperConfig(conf Configuration) *ViperConfig {
 }
 
 func (vc *ViperConfig) Init(name string, back func(v *viper.Viper) error) error {
-	// 并发安全
-	vc.lock.Lock()
-	defer vc.lock.Unlock()
-
 	vc.viper.SetConfigFile(name + ".conf.yaml")
 
 	// 读取配置文件

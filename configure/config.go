@@ -34,10 +34,11 @@ const (
 )
 
 type ServerConfig struct {
-	Mode      string  `mapstructure:"mode"`
-	HTTPPort  *uint   `mapstructure:"http_port"`
-	TCPPort   *uint   `mapstructure:"tcp_port"`
-	JWTSecret *string `mapstructure:"jwt_secret"`
+	Mode      string   `mapstructure:"mode"`
+	HTTPPort  *uint    `mapstructure:"http_port"`
+	TCPPort   *uint    `mapstructure:"tcp_port"`
+	JWTSecret *string  `mapstructure:"jwt_secret"`
+	Data      []string `mapstructure:"data"`
 }
 
 func (sc *ServerConfig) Debug() bool {

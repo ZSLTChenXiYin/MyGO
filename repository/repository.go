@@ -51,9 +51,11 @@ func (r *Repository) Init(conf configure.Configuration, logger *logger.ZapGormLo
 		return fmt.Errorf("自动迁移错误: %v", err)
 	}
 
-	err = back(r.database)
-	if err != nil {
-		return fmt.Errorf("回调错误: %v", err)
+	if back != nil {
+		err = back(r.database)
+		if err != nil {
+			return fmt.Errorf("回调错误: %v", err)
+		}
 	}
 
 	return nil

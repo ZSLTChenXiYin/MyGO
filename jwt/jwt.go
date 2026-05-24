@@ -23,7 +23,7 @@ func NewJWTGenerator(conf configure.Configuration) *JWTGenerator {
 
 func (j *JWTGenerator) Create(claims jwt.MapClaims) (string, error) {
 	claims[JWT_KEY_EXPIRED_AT] = time.Now().Add(time.Hour * 24 * 7).Unix()
-	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(j.secret)
+	return jwt.NewWithClaims(jwt.SigningMethodHS256, &claims).SignedString(j.secret)
 }
 
 func (j *JWTGenerator) Parse(token string) (jwt.MapClaims, error) {

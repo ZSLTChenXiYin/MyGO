@@ -4,7 +4,9 @@ import "github.com/go-playground/validator"
 
 const (
 	VALIDATE_TAG_CAPTCHA = "captcha"
+)
 
+const (
 	CAPTCHA_UNKNOWN = iota
 	CAPTCHA_REGISTER
 	CAPTCHA_LOGIN

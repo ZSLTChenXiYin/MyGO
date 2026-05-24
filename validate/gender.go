@@ -4,7 +4,9 @@ import "github.com/go-playground/validator"
 
 const (
 	VALIDATE_TAG_GENDER = "gender"
+)
 
+const (
 	GENDER_UNKNOWN = iota
 	GENDER_MALE
 	GENDER_FEMALE

@@ -1,7 +1,6 @@
 package jwt
 
 import (
-	"maps"
 	"time"
 
 	"github.com/ZSLTChenXiYin/MyGO/configure"
@@ -24,7 +23,9 @@ func NewJWTGenerator(conf configure.Configuration) *JWTGenerator {
 
 func (j *JWTGenerator) Create(map_claims map[string]any) (string, error) {
 	claims := jwt.MapClaims{}
-	maps.Copy(claims, map_claims)
+	for key, value := range map_claims {
+		claims[key] = value
+	}
 	claims[JWT_KEY_EXPIRED_AT] = time.Now().Add(time.Hour * 24 * 7).Unix()
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(j.secret)
 }
@@ -38,7 +39,9 @@ func (j *JWTGenerator) Parse(token string) (map[string]any, error) {
 	if err != nil {
 		return nil, err
 	}
-	maps.Copy(map_claims, claims)
+	for key, value := range claims {
+		map_claims[key] = value
+	}
 	return map_claims, nil
 }
 

@@ -23,13 +23,13 @@ func NewJWTGenerator(conf configure.Configuration) *JWTGenerator {
 
 func (j *JWTGenerator) Create(claims jwt.MapClaims) (string, error) {
 	claims[JWT_KEY_EXPIRED_AT] = time.Now().Add(time.Hour * 24 * 7).Unix()
-	return jwt.NewWithClaims(jwt.SigningMethodHS256, &claims).SignedString(j.secret)
+	return jwt.NewWithClaims(jwt.SigningMethodHS256, &claims).SignedString([]byte(j.secret))
 }
 
 func (j *JWTGenerator) Parse(token string) (jwt.MapClaims, error) {
 	claims := jwt.MapClaims{}
 	_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (any, error) {
-		return j.secret, nil
+		return []byte(j.secret), nil
 	})
 	if err != nil {
 		return nil, err
@@ -40,11 +40,11 @@ func (j *JWTGenerator) Parse(token string) (jwt.MapClaims, error) {
 func (j *JWTGenerator) Refresh(token string) (string, error) {
 	claims := jwt.MapClaims{}
 	_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (any, error) {
-		return j.secret, nil
+		return []byte(j.secret), nil
 	})
 	if err != nil {
 		return "", err
 	}
 	claims[JWT_KEY_EXPIRED_AT] = time.Now().Add(time.Hour * 24 * 7).Unix()
-	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(j.secret)
+	return jwt.NewWithClaims(jwt.SigningMethodHS256, &claims).SignedString([]byte(j.secret))
 }
